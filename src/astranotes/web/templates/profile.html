@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Profile · AstraNotes{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Profile</h1></div>
+<section class="card">
+  <p>AstraNotes runs as a single-user, local-first application, so there is no account to manage here.</p>
+  <p class="muted">The <code>user_id</code> column is reserved in the schema so multi-user accounts — part
+    of the original cloud vision — can be added later without restructuring the data. See the deferred
+    requirements (FR-04/05/06) in the project documentation.</p>
+</section>
+{% endblock %}

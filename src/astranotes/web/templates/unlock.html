@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Unlock · AstraNotes{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Unlock secure notes</h1></div>
+<section class="card">
+  <form method="post" action="{{ url_for('secure.unlock') }}">
+    <input type="hidden" name="next" value="{{ next }}">
+    {% if requires_passphrase %}
+    <label>Passphrase
+      <input type="password" name="passphrase" autofocus>
+    </label>
+    {% else %}
+    <p class="muted">No passphrase is configured. Click Unlock to reveal secure notes for this session.</p>
+    {% endif %}
+    <button class="btn btn-primary" type="submit">Unlock</button>
+  </form>
+</section>
+{% endblock %}

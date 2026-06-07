@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ note.title }} · AstraNotes{% endblock %}
+{% block content %}
+<article class="note-view">
+  <div class="page-head">
+    <h1>{% if note.is_locked %}🔒 {% endif %}{{ note.title }}</h1>
+    <div class="actions">
+      <a class="btn btn-small" href="{{ url_for('notes.edit_form', note_id=note.note_id) }}">Edit</a>
+      <a class="btn btn-small" href="{{ url_for('notes.history', note_id=note.note_id) }}">History</a>
+      <a class="btn btn-small" href="{{ url_for('export.export_one', note_id=note.note_id) }}">Export .md</a>
+      {% if note.is_locked %}
+      <form method="post" action="{{ url_for('secure.make_public', note_id=note.note_id) }}">
+        <button class="btn btn-small">Unlock (decrypt)</button>
+      </form>
+      {% else %}
+      <form method="post" action="{{ url_for('secure.lock', note_id=note.note_id) }}">
+        <button class="btn btn-small">Lock (encrypt)</button>
+      </form>
+      {% endif %}
+      <form method="post" action="{{ url_for('notes.delete', note_id=note.note_id) }}"
+            onsubmit="return confirm('Delete this note? Its version history is kept for recovery.');">
+        <button class="btn btn-small btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+
+  {% if note.tags %}
+  <div class="tags">{% for tag in note.tags %}<a class="tag" href="{{ url_for('pages.index', tag=tag) }}">#{{ tag }}</a>{% endfor %}</div>
+  {% endif %}
+
+  <div class="rendered">{{ content | markdown }}</div>
+  <p class="note-meta">Last modified {{ note.last_modified.strftime('%Y-%m-%d %H:%M') }}</p>
+</article>
+{% endblock %}

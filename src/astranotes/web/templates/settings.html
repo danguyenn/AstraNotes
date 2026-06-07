@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Settings · AstraNotes{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Settings</h1></div>
+
+<section class="card">
+  <h2>Security</h2>
+  <p>Passphrase gate:
+    <strong>{{ 'enabled' if requires_passphrase else 'not configured (single-user local)' }}</strong>
+  </p>
+  <p class="muted">Secure notes are encrypted at rest with Fernet (AES-128-CBC + HMAC). The key is read
+    from the environment or a git-ignored key file — never from the database and never hardcoded.</p>
+</section>
+
+<section class="card">
+  <h2>Audit log <span class="muted">(append-only)</span></h2>
+  {% if not events %}
+  <p class="muted">No security events recorded yet. Lock, unlock, or restore a note to see entries here.</p>
+  {% else %}
+  <table class="audit">
+    <thead><tr><th>When (UTC)</th><th>Action</th><th>Note</th></tr></thead>
+    <tbody>
+      {% for event in events %}
+      <tr><td>{{ event.created_at }}</td><td>{{ event.action }}</td><td class="mono">{{ event.target_note_id }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+{% endblock %}

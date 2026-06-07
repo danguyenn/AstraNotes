@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} · AstraNotes{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{{ code }}</h1></div>
+<div class="empty">{{ message }} <a href="{{ url_for('pages.index') }}">Go to your notes</a>.</div>
+{% endblock %}

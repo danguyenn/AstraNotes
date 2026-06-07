@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Notes · AstraNotes{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>
+    {% if active_tag %}#{{ active_tag }}
+    {% elif active_folder %}{{ (sidebar_folders | selectattr('folder_id', 'equalto', active_folder) | first).name if sidebar_folders else 'Folder' }}
+    {% else %}All notes{% endif %}
+  </h1>
+  <span class="muted">{{ items | length }} note{{ '' if items | length == 1 else 's' }}</span>
+</div>
+
+{% if not items %}
+<div class="empty">No notes here yet. <a href="{{ url_for('notes.new') }}">Create your first note</a>.</div>
+{% else %}
+<ul class="note-grid">
+  {% for item in items %}
+  <li class="note-card">
+    <a class="note-title" href="{{ url_for('notes.view', note_id=item.note.note_id) }}">
+      {% if item.note.is_locked %}🔒 {% endif %}{{ item.note.title }}
+    </a>
+    <p class="note-preview">
+      {% if item.preview is none %}<em class="locked-text">Locked — unlock to view.</em>
+      {% else %}{{ item.preview[:140] }}{% endif %}
+    </p>
+    {% if item.note.tags %}
+    <div class="tags">{% for tag in item.note.tags %}<span class="tag">#{{ tag }}</span>{% endfor %}</div>
+    {% endif %}
+    <time class="note-meta">{{ item.note.last_modified.strftime('%Y-%m-%d %H:%M') }}</time>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

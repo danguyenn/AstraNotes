@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}History · {{ note.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>History · {{ note.title }}</h1>
+  <a class="btn btn-small" href="{{ url_for('notes.view', note_id=note.note_id) }}">Back to note</a>
+</div>
+
+{% if not versions %}
+<div class="empty">No saved versions yet.</div>
+{% else %}
+<ul class="version-list">
+  {% for version in versions %}
+  <li class="version">
+    <div class="version-body">
+      <strong>{{ version.title_snapshot }}</strong>
+      <time class="note-meta">{{ version.created_at }}</time>
+      {% if note.is_locked %}
+      <p class="version-preview locked-text">🔒 encrypted snapshot</p>
+      {% else %}
+      <p class="version-preview">{{ version.content_snapshot[:160] }}</p>
+      {% endif %}
+    </div>
+    <form method="post" action="{{ url_for('notes.restore', note_id=note.note_id, version_id=version.version_id) }}">
+      <button class="btn btn-small">Restore</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

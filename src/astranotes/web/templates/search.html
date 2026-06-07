@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Search · AstraNotes{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Search</h1></div>
+
+<form class="search-page" method="get" action="{{ url_for('organize.search') }}">
+  <input type="search" name="q" value="{{ query }}" placeholder="Search title and body…" autofocus aria-label="Search query">
+  <button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+{% if not query.strip() %}
+<div class="empty">Type a keyword to search across all your notes.</div>
+{% elif not results %}
+<div class="empty">No notes match “{{ query }}”.</div>
+{% else %}
+<p class="muted">{{ results | length }} result{{ '' if results | length == 1 else 's' }} for “{{ query }}”.</p>
+<ul class="note-grid">
+  {% for result in results %}
+  <li class="note-card">
+    <a class="note-title" href="{{ url_for('notes.view', note_id=result.note.note_id) }}">{{ result.note.title }}</a>
+    <p class="note-preview">{{ result.snippet or result.note.title }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

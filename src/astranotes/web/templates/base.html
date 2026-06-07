@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AstraNotes{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% set active_folder = active_folder|default(None) %}
+  {% set active_tag = active_tag|default(None) %}
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('pages.index') }}">
+      <svg class="brand-mark" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect x="4" y="2.5" width="16" height="19" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <line x1="8" y1="8.5" x2="16" y2="8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="8" y1="12.5" x2="16" y2="12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="8" y1="16.5" x2="12.5" y2="16.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">AstraNotes</span>
+    </a>
+    <form class="search" action="{{ url_for('organize.search') }}" method="get" role="search">
+      <input type="search" name="q" placeholder="Search notes…" value="{{ request.args.get('q', '') }}" aria-label="Search notes">
+    </form>
+    <nav class="topnav">
+      <a href="{{ url_for('pages.index') }}">Notes</a>
+      <a href="{{ url_for('pages.profile') }}">Profile</a>
+      <a href="{{ url_for('pages.settings') }}">Settings</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="btn btn-primary block" href="{{ url_for('notes.new') }}">+ New note</a>
+
+      <section>
+        <h3>Folders</h3>
+        <ul class="nav-list">
+          <li><a href="{{ url_for('pages.index') }}" class="{{ 'active' if not active_folder and not active_tag else '' }}">All notes</a></li>
+          {% for folder in sidebar_folders %}
+          <li>
+            <a href="{{ url_for('pages.index', folder=folder.folder_id) }}" class="{{ 'active' if active_folder == folder.folder_id else '' }}">
+              {{ folder.name }} <span class="count">{{ folder.note_count }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        <form class="inline-form" action="{{ url_for('organize.create_folder') }}" method="post">
+          <input type="text" name="name" placeholder="New folder" aria-label="New folder name">
+          <button class="btn btn-small" type="submit">Add</button>
+        </form>
+      </section>
+
+      {% if sidebar_tags %}
+      <section>
+        <h3>Tags</h3>
+        <div class="tags">
+          {% for tag in sidebar_tags %}
+          <a class="tag {{ 'active' if active_tag == tag else '' }}" href="{{ url_for('pages.index', tag=tag) }}">#{{ tag }}</a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="secure-box">
+        <h3>Secure notes</h3>
+        {% if session_unlocked %}
+        <p class="status unlocked">● Unlocked this session</p>
+        <form action="{{ url_for('secure.lock_session') }}" method="post"><button class="btn btn-small">Lock now</button></form>
+        {% else %}
+        <p class="status locked">● Locked</p>
+        <a class="btn btn-small" href="{{ url_for('secure.unlock_prompt') }}">Unlock</a>
+        {% endif %}
+      </section>
+
+      <section>
+        <a class="link" href="{{ url_for('export.export_bulk', folder=active_folder) }}">⤓ Export {{ 'folder' if active_folder else 'all notes' }} (.zip)</a>
+      </section>
+    </aside>
+
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashes">
+          {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
