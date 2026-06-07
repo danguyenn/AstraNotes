@@ -1,0 +1,37 @@
+# --- AstraNotes: local data and secrets must never be committed ---
+# (Definition of Done: no API keys, secrets, or PII in the repo.)
+instance/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.key
+encryption.key
+flask_secret
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# --- Editor / OS / tooling ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+.claude/

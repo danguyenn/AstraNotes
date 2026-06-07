@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "astranotes"
+version = "1.0.0"
+description = "AstraNotes — a secure, local-first, modular Markdown note-taking application."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "David Nguyen" }]
+keywords = ["notes", "markdown", "local-first", "flask", "sqlite", "encryption"]
+dependencies = [
+    "Flask>=3.0,<4.0",
+    "Markdown>=3.5,<4.0",
+    "bleach>=6.1,<7.0",
+    "cryptography>=42.0,<49.0",
+]
+
+[project.optional-dependencies]
+# Upper bounds are set to the next major above the known-good installed versions
+# (cryptography 48, pytest 9, pytest-cov 7) so a future major can't silently break
+# the build while the pinned set in requirements.lock keeps CI/Docker reproducible.
+dev = [
+    "pytest>=8.0,<10.0",
+    "pytest-cov>=5.0,<8.0",
+    "ruff>=0.6,<1.0",
+    "mypy>=1.10,<2.0",
+    "types-bleach",      # stubs so mypy can strictly type-check markdown_render
+    "types-Markdown",
+]
+prod = ["waitress>=3.0,<4.0"]
+
+[project.scripts]
+astranotes = "astranotes.web.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+astranotes = [
+    "storage/schema.sql",
+    "web/templates/*.html",
+    "web/static/*.css",
+    "web/static/*.js",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+# Conservative set the current code already satisfies: pycodestyle (E/W),
+# pyflakes (F), import sorting (I), pyupgrade (UP), bugbear (B).
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]  # line length is handled by the formatter, not the linter
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B"]  # test helpers intentionally use broad patterns
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src"]
+ignore_missing_imports = true   # bleach/markdown ship without complete stubs
+warn_unused_ignores = true
+warn_redundant_casts = true
+# Not strict globally: services/storage/web/routes are untyped by design. Annotate
+# them incrementally, then tighten per-module here.
+disallow_untyped_defs = false
+check_untyped_defs = false
+
+[[tool.mypy.overrides]]
+# These modules are already fully typed — hold them to a higher bar.
+module = ["astranotes.domain.*", "astranotes.web.markdown_render"]
+disallow_untyped_defs = true
+check_untyped_defs = true
