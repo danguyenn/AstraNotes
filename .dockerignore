@@ -1,0 +1,21 @@
+.git
+.github
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+htmlcov
+instance
+*.db
+docs/artifacts-original
+demo/screenshots
+tests
+
+# Secrets must never enter the build context (defense-in-depth; also gitignored).
+.env
+.env.*
+*.key
+encryption.key
+flask_secret
