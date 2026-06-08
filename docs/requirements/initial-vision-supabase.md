@@ -1,7 +1,7 @@
 # AstraNotes — Initial Vision (Next.js + Supabase)
 
-This is the original cloud requirement baseline from **Week 1.2**, refined in
-**Week 3.1** to 15 requirements. It is preserved here as the historical baseline
+This is the original cloud requirement baseline from **Week 1.2** (14 requirements),
+refined in **Week 3.1** to 15 (NFR-04 accessibility was added). It is preserved here as the historical baseline
 and as the documented future roadmap. The project later pivoted to a local-first
 Flask/SQLite implementation — see
 [ADR-0002](../decisions/ADR-0002-pivot-to-local-first.md) and the
@@ -28,9 +28,9 @@ was realized, reframed, or deferred.
 - **NFR-04 — Accessibility baseline.** WCAG 2.1 AA on core flows (added in Week 3.1).
 
 ## Security, Privacy & Reliability
-- **SEC-01 — Row-level security as the trust boundary.** RLS on all user tables; `owner_id` the single trust boundary; enforced at the DB, not the app.
-- **SEC-02 — Encryption in transit (and at rest).** HTTPS/TLS everywhere, HSTS; Supabase AES-256 at rest.
-- **SEC-03 — Graceful degradation / audit log.** Append-only `audit_log` for shared-note access; local-only editing on Realtime outage.
+- **SPR-01 — Row-level security as the trust boundary.** RLS on all user tables; `owner_id` the single trust boundary; enforced at the DB, not the app.
+- **SPR-02 — Encryption in transit (and at rest).** HTTPS/TLS everywhere, HSTS; Supabase AES-256 at rest.
+- **SPR-03 — Graceful degradation / audit log.** Append-only `audit_log` for shared-note access; local-only editing on Realtime outage.
 
 ## What the pivot kept, reframed, and deferred
 - **Kept & realized:** Markdown CRUD (FR-01 → FR-1/2/3), folders+tags (FR-02 → FR-7), search (FR-03 → FR-4, Postgres FTS → SQLite FTS5), version history (FR-07 → FR-6), export (FR-08 → FR-8).

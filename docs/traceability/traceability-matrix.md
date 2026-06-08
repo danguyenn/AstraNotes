@@ -16,7 +16,7 @@ This updates the Week 5.2 matrix to the shipped local-first product. It adds the
 | **FR-6** Version history + restore | `VersionHistory`, Restore use case | `storage/version_history.py`, `NoteService.restore_version` | `test_versions` (snapshot/restore/reversible/retained) | ✅ Promoted from design-led → realized |
 | **FR-7** Folders + tags | folders/tags/note_tags | `NoteRepository` folder/tag methods | `test_repository::test_tags_*`, `::test_folder_*`, `test_web::test_create_folder_and_duplicate` | ✅ Realized |
 | **FR-8** Export Markdown | (new in realization) | `web/routes/export.py` | `test_web::test_export_single_markdown`, `::test_export_bulk_zip` | ✅ Realized |
-| **NFR-1** Local-first/offline | Deployment diagram (single node) | stdlib `sqlite3`, local `preview.js` | (architectural — no network calls anywhere) | ✅ Fully traced |
+| **NFR-1** Local-first/offline | Deployment diagram (single node) | stdlib `sqlite3`, local `preview.js` | (architectural — verified by inspection; no automated network-absence test) | ✅ Traced by inspection |
 | **NFR-2** Graceful failure | Activity validation + **new storage-failure branches** | `StorageError` in `LocalStorage`; two-branch error UI in routes | `test_storage::test_corrupt_db_raises_storage_error`, `test_web::test_empty_title_flashes_warning` | ✅ Gap resolved (extended beyond create) |
 | **NFR-3** Testability by design | Layered class diagram | strict layering | `test_architecture` (fitness test) | ✅ Realized & enforced |
 | **SEC-1** Encryption at rest | EncryptionService ↔ key store | Fernet; key from env/keyfile | `test_note_service::test_make_private_encrypts_and_locks` | ✅ |

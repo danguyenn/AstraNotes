@@ -1,45 +1,45 @@
-/* AstraNotes — "refined dark" theme.
-   Crafted, high-contrast, one warm amber accent. System fonts only, so the app
-   stays fully offline (no web-font fetch) and within the CSP. */
+/* AstraNotes — "cream & sage" theme.
+   A light, paper-cream base with a single deep forest-green accent.
+   System fonts only, so the app stays fully offline (no web-font fetch) and within the CSP. */
 
 :root {
-  /* Surfaces */
-  --bg: #0d0f12;
-  --bg-elev: #101317;
-  --surface: #16181d;
-  --surface-2: #1f222a;
-  --border: #282c35;
-  --border-strong: #353a45;
+  /* Surfaces — warm paper cream, cards a shade lighter */
+  --bg: #f3eee0;
+  --bg-elev: #fbf7ee;
+  --surface: #fdfbf5;
+  --surface-2: #ece5d4;
+  --border: #e2dbc6;
+  --border-strong: #cdc4a8;
 
-  /* Text */
-  --text: #ececec;
-  --muted: #9ba1ac;
-  --faint: #6b7280;
+  /* Text — deep green-ink, with soft olive-grey for the quieter tones */
+  --text: #232a20;
+  --muted: #5f6753;
+  --faint: #787e6b;
 
-  /* Accent — a single warm amber, no gradients */
-  --accent: #e8a33d;
-  --accent-hover: #f2b455;
-  --accent-ink: #15110a;
-  --accent-tint: rgba(232, 163, 61, 0.14);
-  --accent-line: rgba(232, 163, 61, 0.5);
+  /* Accent — a single deep forest green, no gradients */
+  --accent: #2f6e3c;
+  --accent-hover: #25592f;
+  --accent-ink: #f4f7ee;
+  --accent-tint: rgba(47, 110, 60, 0.12);
+  --accent-line: rgba(47, 110, 60, 0.45);
 
-  /* Semantic (retuned for this palette) */
-  --warn-bg: #2a230f; --warn-fg: #f0cf7a; --warn-line: #8a6d22;
-  --danger-bg: #2c1418; --danger-fg: #f3a3ad; --danger-line: #8c3340;
-  --ok-bg: #122a1c; --ok-fg: #88d8a6; --ok-line: #2f6f4a;
+  /* Semantic (retuned for this light palette) */
+  --warn-bg: #fbf3da; --warn-fg: #7a5d12; --warn-line: #d8b85a;
+  --danger-bg: #fbe9ea; --danger-fg: #9b2c33; --danger-line: #e0a3a8;
+  --ok-bg: #e7f2e9; --ok-fg: #2f6e3c; --ok-line: #9ccda8;
 
   /* Shape & motion */
   --radius: 10px;
   --radius-sm: 7px;
   --radius-pill: 999px;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .28);
+  --shadow: 0 1px 2px rgba(45, 40, 20, .08), 0 10px 28px rgba(45, 40, 20, .12);
   --ring: 0 0 0 3px var(--accent-tint);
   --speed: 120ms;
 
   --font-ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -75,7 +75,7 @@ h3 {
 .topbar {
   display: flex; align-items: center; gap: 1rem;
   height: 56px; padding: 0 1.25rem;
-  background: rgba(13, 15, 18, .85);
+  background: rgba(243, 238, 224, .85);
   backdrop-filter: saturate(140%) blur(8px);
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 20;
@@ -118,7 +118,7 @@ h3 {
   font-size: .85rem; font-weight: 500; line-height: 1; font-family: inherit;
   transition: border-color var(--speed), background var(--speed), color var(--speed), transform var(--speed);
 }
-.btn:hover { background: #262a33; border-color: var(--border-strong); color: var(--text); }
+.btn:hover { background: #e6ddc8; border-color: var(--border-strong); color: var(--text); }
 .btn:active { transform: translateY(1px); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--accent-ink); }

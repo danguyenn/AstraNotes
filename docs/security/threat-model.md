@@ -38,6 +38,6 @@ configuration.
 
 ## If the app is exposed to a network (non-default)
 Running behind a reverse proxy reintroduces network threats. Mitigations: TLS +
-HSTS at the proxy (cloud SEC-02 equivalent), and — before any real multi-user use —
+HSTS at the proxy (cloud SPR-02 equivalent), and — before any real multi-user use —
 restore an authentication + per-user authorization boundary (the deferred FR-04 /
 SPR-01), for which the schema's `user_id` placeholder is reserved.

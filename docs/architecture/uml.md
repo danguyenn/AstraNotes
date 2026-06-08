@@ -91,6 +91,10 @@ classDiagram
 The hollow-diamond aggregation from `NoteRepository` to `VersionHistory` is the
 deliberate choice that lets version records outlive their note (FR-3 + FR-6).
 
+For clarity the `NoteService` box shows the core note use cases; its folder/tag/move
+accessors (`list_folders`, `create_folder`, `list_tags`, `move_note` — FR-7) are
+elided from the diagram.
+
 ## 2. Use-case diagram
 
 ```mermaid

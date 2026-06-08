@@ -87,7 +87,7 @@ Full design + UML diagrams: [`docs/architecture/`](docs/architecture/).
 src/astranotes/        application (domain · services · storage · web)
 tests/                 pytest suite (unit · integration · architecture fitness)
 docs/                  the full SDLC artifact set (see index below)
-demo/                  seed_data.py · demo-script.md · screenshots/
+demo/                  seed_data.py · demo-script.md · recording-guide.md · capture_screenshots.py · screenshots/
 .github/workflows/     CI (ruff + mypy + pytest on push/PR)
 Makefile               developer task runner (make check / run / docker-build)
 requirements.lock      pinned transitive deps for reproducible builds

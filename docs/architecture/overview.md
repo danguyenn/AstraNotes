@@ -47,7 +47,7 @@ shared leaves: config · errors · timeutil
 | Table | Purpose | Notes |
 |-------|---------|-------|
 | `notes` | Title, content, folder, lock state, key ref, timestamps | `content` is ciphertext when `is_locked`; `user_id` placeholder |
-| `folders` / `tags` / `note_tags` | Organization (FR-7) | folder name unique |
+| `folders` / `tags` / `note_tags` | Organization (FR-7) | folder name unique per user (`UNIQUE(name, user_id)`) |
 | `note_versions` | Snapshot per save (FR-6) | **no FK to notes** → survives delete (FR-3) |
 | `notes_fts` | FTS5 virtual table over title+body (FR-4) | locked notes excluded |
 | `audit_log` | lock / unlock / restore events (SEC-4) | append-only via triggers |

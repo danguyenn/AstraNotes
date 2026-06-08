@@ -27,7 +27,11 @@
 | `web/app.py` | 93% |
 | `web/deps.py` | 100% |
 | `web/markdown_render.py` | 91% |
-| `web/routes/*` | 72–100% |
+| `web/routes/pages.py` | 100% |
+| `web/routes/organize.py` | 93% |
+| `web/routes/export.py` | 82% |
+| `web/routes/notes.py` | 77% |
+| `web/routes/secure.py` | 72% (lowest — unlock/redirect branches) |
 | `wsgi.py` | 0% (prod entry; imported, not exercised in tests) |
 | **TOTAL** | **89%** |
 

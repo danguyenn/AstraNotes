@@ -81,3 +81,9 @@ check_untyped_defs = false
 module = ["astranotes.domain.*", "astranotes.web.markdown_render"]
 disallow_untyped_defs = true
 check_untyped_defs = true
+
+[tool.coverage.report]
+# Machine-enforced floor: when --cov is active (CI and the documented command), a
+# coverage regression below this fails the run rather than only showing in the report.
+# Measured coverage is ~89%; 85 leaves normal headroom without masking a real drop.
+fail_under = 85

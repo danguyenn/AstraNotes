@@ -26,8 +26,11 @@ never share state.
 | FR-6 versions/restore | `test_versions` |
 | FR-7 folders/tags | `test_repository`, `test_web` |
 | FR-8 export | `test_web` |
-| NFR-2 graceful failure | `test_storage` (corrupt-db), `test_web` (validation) |
+| NFR-1 local-first/offline | (architectural — verified by inspection; no automated network-absence test) |
+| NFR-2 graceful failure | `test_storage` (corrupt-db), `test_config` (fail-fast startup), `test_web` (validation) |
 | NFR-3 testability/layering | `test_architecture` |
+| SEC-1 encryption at rest | `test_note_service`, `test_encryption` |
+| SEC-2 device trust boundary | (architectural — verified by inspection) |
 | SEC-3 XSS | `test_web::test_xss_is_sanitized` |
 | SEC-4 audit append-only | `test_audit` |
 

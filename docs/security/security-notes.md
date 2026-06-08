@@ -16,15 +16,18 @@ analysis.
 | **Tamper-evident audit log** | SEC-4 | `audit_log` records lock/unlock/restore; DB triggers `RAISE(ABORT)` on UPDATE/DELETE, so the trail is append-only even against direct DB writes. |
 | **Passphrase gate (optional)** | FR-5 | `ASTRANOTES_PASSPHRASE_SHA256` gates session unlock; only the SHA-256 hash is stored, compared with `secrets.compare_digest`. |
 | **Input validation** | NFR-2 | Domain invariants reject invalid notes; `StorageError`/`ValueError` produce distinct, non-crashing error UI. |
-| **HTTP security headers** | SEC-3 | An `after_request` hook sets `Content-Security-Policy` (same-origin `default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer`. |
+| **HTTP security headers** | SEC-3 | An `after_request` hook sets `Content-Security-Policy` (`default-src 'self'`; `script-src 'self' 'unsafe-inline'`; `style-src 'self'`; `img-src 'self' data:`; `object-src 'none'`; `base-uri 'self'`; `form-action 'self'`; `frame-ancestors 'none'`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer`. |
 | **Fail-fast config validation** | NFR-2 | `load_config` rejects an ill-formed `ASTRANOTES_ENCRYPTION_KEY` or an uncreatable database directory at startup with a clear `ConfigError`, instead of failing cryptically mid-request. |
 
 ## Operational guidance
 - In production, set `ASTRANOTES_ENCRYPTION_KEY` and `ASTRANOTES_SECRET_KEY`
   explicitly so keys are stable across restarts, and **back up the encryption key
   separately** from the database — losing it means locked notes cannot be decrypted.
+  When `ASTRANOTES_SECRET_KEY` is unset, the Flask session secret is generated once
+  into the git-ignored `instance/flask_secret` (mirroring the encryption-key
+  fallback), so dev sessions survive restarts without committing a secret.
 - If exposed beyond localhost, run behind a **TLS-terminating reverse proxy**
-  (nginx/Caddy) — this is the local-first stand-in for the cloud SEC-02 (TLS/HSTS).
+  (nginx/Caddy) — this is the local-first stand-in for the cloud SPR-02 (TLS/HSTS).
 
 ## Honest threat-model boundaries (called out for the defense)
 A security review surfaced these limits; they are stated plainly rather than

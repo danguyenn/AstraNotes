@@ -37,3 +37,27 @@ jobs:
 
       - name: Run tests
         run: pytest --cov=astranotes --cov-report=term-missing
+
+  # Validates the pinned requirements.lock — the reproducible set the Dockerfile
+  # installs. The range-resolved install in `test` would not catch lock drift, so
+  # this job mirrors the Dockerfile's pinned install and runs the suite against it.
+  locked-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned runtime set + package (mirrors Dockerfile)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock
+          pip install --no-deps .
+
+      - name: Run tests against the pinned set
+        run: |
+          pip install pytest pytest-cov
+          pytest

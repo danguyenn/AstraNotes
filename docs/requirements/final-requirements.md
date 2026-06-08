@@ -95,25 +95,32 @@ export.
 ### NFR-1 — Local-first / offline
 All data persists on the user's device in a single SQLite file. The app requires
 no network connection; even the live-preview script is served locally (no CDN).
+- **AC:** A static scan of the source finds zero outbound network calls or CDN references, and the app runs fully with networking disabled.
 - **Realized by:** stdlib `sqlite3`, locally-served `preview.js`, no remote calls anywhere in the codebase.
 
 ### NFR-2 — Graceful failure
 Invalid input and storage failures are reported as distinct, clear errors rather
 than crashes. Input errors (`ValueError`) and write failures (`StorageError`)
 render as two visually different flash styles.
+- **AC:** An empty-title submit flashes a validation warning, and a corrupt or unwritable database surfaces a distinct `StorageError` message — neither path crashes the app.
 - **Realized by:** `StorageError` wrapping in `LocalStorage`; the two-branch error handling in `web/routes/notes.py`; failure-path tests. Behavior extended beyond the create flow — resolves Week 5.2 gap.
 
 ### NFR-3 — Testability by design
 The layers (domain, storage, services, web) are separated so each is unit-testable
 in isolation, and the import direction is enforced automatically.
+- **AC:** `tests/test_architecture.py` fails the build on any cross-layer (upward) import, and each test runs against an isolated `tmp_path` database.
 - **Realized by:** strict layering, `tests/test_architecture.py` fitness test, per-test `tmp_path` isolation.
 
 ## Security & Privacy Requirements (Local-First)
 
 - **SEC-1 — Encryption at rest.** SecureNote bodies are encrypted with Fernet; keys live outside the database (env var or git-ignored key file), never hardcoded.
+  - **AC:** A locked note's body is stored as ciphertext in the `.db` (`test_note_service::test_make_private_encrypts_and_locks`, `test_encryption`).
 - **SEC-2 — Data never leaves the device.** With no network surface, the device itself is the trust boundary — the local-first replacement for the original Supabase RLS boundary (SPR-01).
+  - **AC:** A static inspection finds no remote/network surface; the device is the only trust boundary (verified by inspection — see NFR-1).
 - **SEC-3 — XSS prevention.** Rendered Markdown is sanitized server-side with a bleach allow-list; the live preview escapes input before rendering.
+  - **AC:** A `<script>` payload in a note body is escaped/stripped in both the live preview and the rendered view (`test_web::test_xss_is_sanitized`).
 - **SEC-4 — Append-only audit log.** Lock, unlock, and restore are recorded in an `audit_log` whose UPDATE/DELETE are rejected by database triggers — the local-first realization of SPR-03.
+  - **AC:** A direct `UPDATE` or `DELETE` against `audit_log` is rejected by a DB trigger (`test_audit`).
 
 See [security-notes.md](../security/security-notes.md) and
 [threat-model.md](../security/threat-model.md).

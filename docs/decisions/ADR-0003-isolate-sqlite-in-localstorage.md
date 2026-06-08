@@ -18,8 +18,11 @@ row), not on a driver type.
 
 ## Consequences
 - The repository and everything above it are driver-agnostic.
-- A single fitness test (`tests/test_architecture.py`) and a dict-return test
-  (`tests/test_storage.py`) keep the boundary honest.
+- The dict-return test (`tests/test_storage.py`) proves callers receive plain
+  `dict`s rather than `sqlite3.Row`, and the architecture fitness test
+  (`tests/test_architecture.py`) keeps the layer imports pointing downward. The
+  `sqlite3`-only-in-`LocalStorage` rule itself is upheld by code review / convention
+  (the fitness test checks layer direction, not third-party imports).
 - Errors surface as `StorageError`, enabling the distinct failure UI (NFR-2).
 
 ## Lesson recorded

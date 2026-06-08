@@ -5,7 +5,9 @@ reasoning partner; **every output that touched code, requirements, or docs passe
 through human review before it was accepted** (the
 [Working Agreement](../planning/working-agreement.md) three-question check). This
 log is the accept/refine/reject trail across each SDLC stage, drawn from the
-quarter's artifacts and the final build.
+quarter's artifacts and the final build. The dated *Week N* / *Lab N* labels below
+name prior-quarter coursework deliverables (the source artifacts) — they are not
+files committed to this repo.
 
 ## Summary table
 
@@ -21,8 +23,8 @@ quarter's artifacts and the final build.
 ## By stage
 
 ### 1. Requirements (Week 1.2, refined Week 3.1)
-- **Accept:** AI drafted the initial 14 requirements from a role+context+constraint prompt; the measurable, testable ones were kept.
-- **Refine:** First-pass ACs were vague ("the app should be fast", "works as expected"). They were rewritten with thresholds and made demo-verifiable. Using AI as a *reviewer* ("what does this not say? what would two engineers disagree on? what happens on failure?") surfaced the FR-06 concurrent-edit conflict, the FR-04 user-enumeration leak, and the missing HSTS in SEC-02.
+- **Accept:** AI drafted the initial 14 requirements (Week 1.2) from a role+context+constraint prompt; the measurable, testable ones were kept. The Week 3.1 refinement added a 15th (NFR-04 accessibility).
+- **Refine:** First-pass ACs were vague ("the app should be fast", "works as expected"). They were rewritten with thresholds and made demo-verifiable. Using AI as a *reviewer* ("what does this not say? what would two engineers disagree on? what happens on failure?") surfaced the FR-06 concurrent-edit conflict, the FR-04 user-enumeration leak, and the missing HSTS in SPR-02.
 - **Reject:** AI pushed end-to-end encryption, full offline-first architecture, and enterprise SSO — all reasonable but unrealistic for a solo 10-week project. Left out to keep scope honest.
 
 ### 2. Architecture (Lab 1.2 ADL)
