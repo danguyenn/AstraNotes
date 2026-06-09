@@ -88,6 +88,7 @@ src/astranotes/        application (domain · services · storage · web)
 tests/                 pytest suite (unit · integration · architecture fitness)
 docs/                  the full SDLC artifact set (see index below)
 demo/                  seed_data.py · demo-script.md · recording-guide.md · capture_screenshots.py · screenshots/
+tools/                 dev tooling (render_diagrams.py → docs/architecture/diagrams/)
 .github/workflows/     CI (ruff + mypy + pytest on push/PR)
 Makefile               developer task runner (make check / run / docker-build)
 requirements.lock      pinned transitive deps for reproducible builds
@@ -99,7 +100,7 @@ requirements.lock      pinned transitive deps for reproducible builds
 |------|---|
 | Requirements | [final-requirements](docs/requirements/final-requirements.md) · [initial cloud vision](docs/requirements/initial-vision-supabase.md) |
 | Planning | [backlog](docs/planning/backlog.md) · [sprint-zero](docs/planning/sprint-zero.md) · [working-agreement](docs/planning/working-agreement.md) · [definition-of-done](docs/planning/definition-of-done.md) · [waterfall-gantt](docs/planning/waterfall-gantt.md) |
-| Architecture | [overview](docs/architecture/overview.md) · [UML (Mermaid)](docs/architecture/uml.md) |
+| Architecture | [overview](docs/architecture/overview.md) · [UML (Mermaid)](docs/architecture/uml.md) · [rendered diagram gallery](docs/architecture/diagrams/) |
 | Decisions | [ADR-0001…0007](docs/decisions/) |
 | Traceability | [matrix (gaps resolved)](docs/traceability/traceability-matrix.md) |
 | Testing | [test-plan](docs/testing/test-plan.md) · [test-report](docs/testing/test-report.md) |

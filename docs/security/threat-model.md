@@ -16,6 +16,22 @@ configuration.
         └── (no network surface by default)
 ```
 
+The same boundary as a diagram (a rendered image is in
+[`../architecture/diagrams/`](../architecture/diagrams/)):
+
+```mermaid
+flowchart TB
+    subgraph trusted["Trust boundary — the user's device (trusted by design)"]
+        proc["AstraNotes process (Flask / Waitress)"]
+        db[("SQLite — ciphertext for locked notes")]
+        keys[["Key store — env var / instance key file"]]
+        proc --> db
+        proc -. reads key .-> keys
+    end
+    net{{"No network surface by default (add a TLS proxy only if exposed)"}}
+    trusted -. exposed only on purpose .-> net
+```
+
 ## STRIDE summary
 
 | Threat | Scenario | Mitigation | Residual risk |

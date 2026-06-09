@@ -5,6 +5,7 @@
 - **Quality gates:** `ruff check`, `ruff format --check`, and `mypy src` run in CI and via `make check`. Fix findings rather than broadening the `pyproject` ignore lists; `mypy` holds `domain/*` and `markdown_render` to a strict bar.
 - **Tests are the gate:** never claim a change is safe without running `pytest` and citing the result (see [test-report.md](../testing/test-report.md)). Update that report's numbers from the actual output, not from memory.
 - **Architecture fitness:** `tests/test_architecture.py` fails the build if a new module imports across a layer boundary — keep the layering intact rather than suppressing it.
+- **Diagrams:** the Mermaid in the docs is the source of truth (GitHub renders it inline). Re-render the PNG/SVG exports in `docs/architecture/diagrams/` with `make diagrams` (or `python tools/render_diagrams.py`, which needs Node + npx) after editing any diagram.
 
 ## Logging & observability
 - The app configures logging in the factory (level via `ASTRANOTES_LOG_LEVEL`, default `INFO`) and logs app start plus lock/unlock/restore and storage/encryption failures under the `astranotes.*` loggers.

@@ -1,7 +1,7 @@
 # AstraNotes developer task runner.
 # On Windows, install `make` (e.g. `choco install make`) or run the underlying
 # commands directly — each target is a thin wrapper around a real command.
-.PHONY: install test cov lint format typecheck check run seed docker-build docker-run
+.PHONY: install test cov lint format typecheck check run seed diagrams docker-build docker-run
 
 install:
 	python -m pip install --upgrade pip
@@ -31,6 +31,10 @@ run:
 
 seed:
 	python demo/seed_data.py --reset
+
+# Re-render every Mermaid diagram in the docs to PNG/SVG (needs Node + npx).
+diagrams:
+	python tools/render_diagrams.py
 
 docker-build:
 	docker build -t astranotes:latest .

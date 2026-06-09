@@ -20,6 +20,39 @@ domain     Note · SecureNote
 shared leaves: config · errors · timeutil
 ```
 
+The same layering as a diagram (GitHub renders Mermaid inline; a rendered image is
+in [`diagrams/`](diagrams/)):
+
+```mermaid
+flowchart TB
+    subgraph web["web — routes · Jinja templates · static"]
+        wroutes["routes/*"]
+        wapp["app.py · composition root"]
+    end
+    subgraph services["services — use-case orchestration (no SQL)"]
+        nsvc["NoteService"]
+        esvc["EncryptionService"]
+        usess["UserSession"]
+    end
+    subgraph storage["storage — the only layer that imports sqlite3"]
+        lstore["LocalStorage"]
+        nrepo["NoteRepository"]
+        vh["VersionHistory"]
+        si["SearchIndex"]
+        al["AuditLog"]
+    end
+    subgraph domain["domain — pure entities + invariants"]
+        dnote["Note"]
+        dsn["SecureNote"]
+    end
+    web ==>|imports| services
+    services ==>|imports| storage
+    storage ==>|imports| domain
+```
+
+Imports only ever point **down** this chain; nothing points back up — and
+`tests/test_architecture.py` fails the build if it does.
+
 - `web` never imports `storage` directly (routes go through `services`); the
   application factory in `web/app.py` is the one composition root that wires the
   layers together.
@@ -51,6 +84,59 @@ shared leaves: config · errors · timeutil
 | `note_versions` | Snapshot per save (FR-6) | **no FK to notes** → survives delete (FR-3) |
 | `notes_fts` | FTS5 virtual table over title+body (FR-4) | locked notes excluded |
 | `audit_log` | lock / unlock / restore events (SEC-4) | append-only via triggers |
+
+The same schema as an entity-relationship diagram. Note the three tables with **no
+foreign key to `notes`** — that absence is deliberate (`note_versions` survives a
+note delete; `notes_fts` and `audit_log` reference a note id only logically):
+
+```mermaid
+erDiagram
+    folders ||--o{ notes : "folder_id (ON DELETE SET NULL)"
+    notes ||--o{ note_tags : "tagged via"
+    tags ||--o{ note_tags : "applied via"
+    folders {
+        TEXT folder_id PK
+        TEXT name
+        TEXT user_id "placeholder; UNIQUE(name,user_id)"
+    }
+    notes {
+        TEXT note_id PK
+        TEXT title
+        TEXT content "ciphertext when is_locked"
+        TEXT folder_id FK
+        INTEGER is_locked
+        TEXT encryption_key_ref
+        TEXT user_id "placeholder"
+        TEXT created_at
+        TEXT last_modified
+    }
+    tags {
+        TEXT tag_id PK
+        TEXT name "UNIQUE"
+    }
+    note_tags {
+        TEXT note_id PK_FK
+        TEXT tag_id PK_FK
+    }
+    note_versions {
+        TEXT version_id PK
+        TEXT note_id "logical ref - NO FK, survives delete"
+        TEXT title_snapshot
+        TEXT content_snapshot
+        TEXT created_at
+    }
+    notes_fts {
+        TEXT note_id "UNINDEXED, logical ref"
+        TEXT title "FTS5 virtual"
+        TEXT content "locked notes excluded"
+    }
+    audit_log {
+        TEXT event_id PK
+        TEXT action "lock / unlock / restore"
+        TEXT target_note_id "logical ref - append-only"
+        TEXT created_at
+    }
+```
 
 ## Two design principles carried from the artifacts
 
